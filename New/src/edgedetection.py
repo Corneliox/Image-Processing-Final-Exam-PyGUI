@@ -32,11 +32,11 @@ def display_images(images):
     num_cols = 5  # Adjust the number of columns as needed
     num_rows = (num_images + num_cols - 1) // num_cols
 
-    layout = [[sg.Image(key=f'-IMAGE_{i}-') for i in range(num_cols)] for j in range(num_rows)]
+    layout = [[sg.Image(key=f'-IMAGE_{i}-') for i in range(j*num_cols, min((j+1)*num_cols, num_images))] for j in range(num_rows)]
     window = sg.Window('Processed Images', layout, finalize=True)
 
     for i, image in enumerate(images):
-        image_tk = ImageTk.PhotoImage(Image.fromarray(image))  # Using PIL
+        image_tk = ImageTk.PhotoImage(Image.fromarray(image))
         window[f'-IMAGE_{i}-'].update(data=image_tk)
 
     window.read(close=True)
