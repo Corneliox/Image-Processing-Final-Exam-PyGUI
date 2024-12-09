@@ -33,10 +33,10 @@ def display_images(images):
     num_rows = (num_images + num_cols - 1) // num_cols
 
     layout = [[sg.Image(key=f'-IMAGE_{i}-') for i in range(num_cols)] for j in range(num_rows)]
-    window = sg.Window('Processed Images', layout)
+    window = sg.Window('Processed Images', layout, finalize=True)
 
     for i, image in enumerate(images):
-        image_tk = cv2_to_tk(image)
+        image_tk = ImageTk.PhotoImage(Image.fromarray(image))  # Using PIL
         window[f'-IMAGE_{i}-'].update(data=image_tk)
 
     window.read(close=True)
@@ -48,7 +48,7 @@ layout = [
     [sg.Button('Process'), sg.Button('Save'), sg.Button('Exit')]
 ]
 
-window = sg.Window('Image Sharpening', layout)
+window = sg.Window('Image Sharpening', layout, finalize=True)  # Add finalize=True
 
 image_folder = None
 processed_images = []
