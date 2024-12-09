@@ -144,6 +144,24 @@ def launch_ui():
         elif event == "Save" and "sharpen_save_name" in values:
             save_image(processed_image, values["sharpen_save_name"])
             sg.popup("Sharpened image saved.")
+        
+        # Smoothing Logic
+        if event == "smooth_level":
+            intensity = values["smooth_level"]
+            processed_image = apply_smoothing(image_path, intensity=intensity)
+            display_image(window, "smooth_output", processed_image)
+        elif event == "Save" and "smooth_save_name" in values:
+            save_image(processed_image, values["smooth_save_name"])
+            sg.popup("Smoothed image saved.")
+        
+        # Segment Logic
+        if event == "segment_threshold":
+            intensity = values["segment_threshold"]
+            processed_image = apply_smoothing(image_path, intensity=intensity)
+            display_image(window, "segment_output", processed_image)
+        elif event == "Save" and "segment_save_name" in values:
+            save_image(processed_image, values["segment_save_name"])
+            sg.popup("Sharpened image saved.")
 
         # Back button logic: clear images and return to Main
         if event == "Back":
