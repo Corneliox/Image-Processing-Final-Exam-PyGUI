@@ -36,6 +36,8 @@ def launch_ui():
     # Layouts for each page
     main_layout = [
         [sg.Text("Image Processing Application", size=(30, 1), justification="center")],
+        [sg.Text("Upload an Image:"), sg.Input(), sg.FileBrowse(key="image_path"), sg.Button("Load Image")],
+        [sg.Image(key="main_image_display")],
         [sg.Button("Sharpening"), sg.Button("Smoothing"), sg.Button("Edge Detection"), sg.Button("Segmentation")],
         [sg.Exit()]
     ]
