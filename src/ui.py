@@ -1,13 +1,10 @@
 import PySimpleGUI as sg
 import os
+import cv2
 from PIL import Image
 from io import BytesIO
 import numpy as np
 from utils import save_image
-from sharpening import apply_sharpening
-from smoothing import apply_smoothing
-from edge_detection import apply_sobel, apply_canny
-from segmentation import apply_segmentation
 
 
 # Function to display images in the GUI
@@ -31,6 +28,44 @@ def clear_page(window, keys):
         window[key].update(data=None)
 
 
+# Image processing functions
+def apply_sharpening(image_path, intensity=5):
+    image = cv2.imread(image_path)
+    kernel = np.array([[0, -1, 0],
+                       [-1, intensity, -1],
+                       [0, -1, 0]])
+    return cv2.filter2D(image, -1, kernel)
+
+
+def apply_smoothing(image_path, intensity=5):
+    image = cv2.imread(image_path)
+    # Larger kernel size for higher intensity smoothing
+    return cv2.GaussianBlur(image, (intensity * 2 + 1, intensity * 2 + 1), 0)
+
+
+def apply_sobel(image_path):
+    image = cv2.imread(image_path, 0)
+    return cv2.Sobel(image, cv2.CV_64F, 1, 1, ksize=5)
+
+
+def apply_canny(image_path):
+    image = cv2.imread(image_path, 0)
+    return cv2.Canny(image, 100, 200)
+
+
+def apply_segmentation(image_path, threshold=5):
+    image = cv2.imread(image_path)
+    data = image.reshape((-1, 3))
+    data = np.float32(data)
+
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.2)
+    _, labels, centers = cv2.kmeans(data, threshold, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+
+    centers = np.uint8(centers)
+    segmented_image = centers[labels.flatten()]
+    return segmented_image.reshape(image.shape)
+
+
 # Function to navigate between pages
 def switch_page(window, page):
     for p in ["Main", "Sharpening", "Smoothing", "Edge Detection", "Segmentation"]:
@@ -38,6 +73,18 @@ def switch_page(window, page):
     window[f"-PAGE_{page}-"].update(visible=True)
 
 
+# Function to save the image
+def save_image(image, filename):
+    try:
+        # Ensure the directory exists
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        # Save the image
+        cv2.imwrite(filename, image)
+    except Exception as e:
+        sg.popup_error(f"Error saving image: {str(e)}")
+
+
+# Function to launch the GUI
 def launch_ui():
     sg.theme("DarkBlue")
 
@@ -108,7 +155,6 @@ def launch_ui():
             if values["image_path"]:
                 image_path = values["image_path"]
                 try:
-                    # Validate and display the uploaded image
                     display_image(window, "main_image_display", image_path)
                     sg.popup("Image loaded successfully!")
                 except Exception as e:
@@ -152,6 +198,15 @@ def launch_ui():
             threshold = values["segment_threshold"]
             processed_image = apply_segmentation(image_path, threshold=threshold)
             display_image(window, "segment_output", processed_image)
+
+        # Handling "Save" button event
+        elif event == "Save":
+            save_name = values["sharpen_save_name"] if 'sharpen' in event else values["smooth_save_name"]
+            if save_name:
+                save_image(processed_image, save_name)
+                sg.popup(f"Image saved as {save_name}")
+            else:
+                sg.popup_error("Please provide a valid file name.")
 
         # Handling "Back" button event
         elif event == "Back":
