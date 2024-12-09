@@ -91,7 +91,7 @@ def launch_ui():
          sg.Column(segmentation_layout, key="-PAGE_Segmentation-", visible=False)]
     ]
 
-    window = sg.Window("Image Processing Application", layout, finalize=True)
+    window = sg.Window("Image Processing Final Exam GUI", layout, finalize=True)
 
     # Image path for processing
     image_path = None
@@ -165,10 +165,11 @@ def launch_ui():
 
         # Back button logic: clear images and return to Main
         if event == "Back":
-            current_page = [key for key in window.AllKeysDict.keys() if window[key].Visible][0]
+            current_page = [key for key in window.AllKeysDict.keys() if window[key].visible][0]
             page_name = current_page.replace("-PAGE_", "")
             clear_page(window, [f"{page_name.lower()}_input", f"{page_name.lower()}_output"])
             switch_page(window, "Main")
+            display_image(window, "main_image_display", image_path)
 
     window.close()
 
