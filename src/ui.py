@@ -43,7 +43,7 @@ def launch_ui():
 
     # Layouts for each page
     main_layout = [
-        [sg.Text("Image Processing Application", size=(30, 1), justification="center")],
+        [sg.Text("Image Processing Final Exam GUI", size=(30, 1), justification="center")],
         [sg.Text("Upload an Image:"), sg.Input(), sg.FileBrowse(key="image_path"), sg.Button("Load Image")],
         [sg.Image(key="main_image_display")],
         [sg.Button("Sharpening"), sg.Button("Smoothing"), sg.Button("Edge Detection"), sg.Button("Segmentation")],
@@ -99,6 +99,7 @@ def launch_ui():
 
     while True:
         event, values = window.read()
+
         if event in (sg.WINDOW_CLOSED, "Exit"):
             break
 
@@ -136,40 +137,30 @@ def launch_ui():
         else:
             sg.popup_error("Please upload an image before proceeding.")
 
-        # Sharpening Logic
+        # Real-time update for Sharpening, Smoothing, and Segmentation sliders
         if event == "sharpen_intensity":
             intensity = values["sharpen_intensity"]
             processed_image = apply_sharpening(image_path, intensity=intensity)
             display_image(window, "sharpen_output", processed_image)
-        elif event == "Save" and "sharpen_save_name" in values:
-            save_image(processed_image, values["sharpen_save_name"])
-            sg.popup("Sharpened image saved.")
-        
-        # Smoothing Logic
-        if event == "smooth_level":
+
+        elif event == "smooth_level":
             intensity = values["smooth_level"]
             processed_image = apply_smoothing(image_path, intensity=intensity)
             display_image(window, "smooth_output", processed_image)
-        elif event == "Save" and "smooth_save_name" in values:
-            save_image(processed_image, values["smooth_save_name"])
-            sg.popup("Smoothed image saved.")
-        
-        # Segment Logic
-        if event == "segment_threshold":
-            intensity = values["segment_threshold"]
-            processed_image = apply_smoothing(image_path, intensity=intensity)
-            display_image(window, "segment_output", processed_image)
-        elif event == "Save" and "segment_save_name" in values:
-            save_image(processed_image, values["segment_save_name"])
-            sg.popup("Sharpened image saved.")
 
-        # Back button logic: clear images and return to Main
-        if event == "Back":
-            current_page = [key for key in window.AllKeysDict.keys() if window[key].visible][0]
-            page_name = current_page.replace("-PAGE_", "")
-            clear_page(window, [f"{page_name.lower()}_input", f"{page_name.lower()}_output"])
+        elif event == "segment_threshold":
+            threshold = values["segment_threshold"]
+            processed_image = apply_segmentation(image_path, threshold=threshold)
+            display_image(window, "segment_output", processed_image)
+
+        # Handling "Back" button event
+        elif event == "Back":
+            # Clear processed images and show the original image
+            clear_page(window, ["sharpen_input", "sharpen_output", "smooth_input", "smooth_output",
+                                "edge_input", "edge_sobel", "edge_canny", "segment_input", "segment_output"])
             switch_page(window, "Main")
-            display_image(window, "main_image_display", image_path)
+            if image_path:
+                display_image(window, "main_image_display", image_path)
 
     window.close()
 
