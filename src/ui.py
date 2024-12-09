@@ -25,6 +25,12 @@ def display_image(window, key, image_data):
         sg.popup_error(f"Error displaying image: {str(e)}")
 
 
+# Function to clear processed images on a page
+def clear_page(window, keys):
+    for key in keys:
+        window[key].update(data=None)
+
+
 # Function to navigate between pages
 def switch_page(window, page):
     for p in ["Main", "Sharpening", "Smoothing", "Edge Detection", "Segmentation"]:
@@ -139,7 +145,12 @@ def launch_ui():
             save_image(processed_image, values["sharpen_save_name"])
             sg.popup("Sharpened image saved.")
 
-        # Similar logic for Smoothing, Edge Detection, Segmentation...
+        # Back button logic: clear images and return to Main
+        if event == "Back":
+            current_page = [key for key in window.AllKeysDict.keys() if window[key].Visible][0]
+            page_name = current_page.replace("-PAGE_", "")
+            clear_page(window, [f"{page_name.lower()}_input", f"{page_name.lower()}_output"])
+            switch_page(window, "Main")
 
     window.close()
 
