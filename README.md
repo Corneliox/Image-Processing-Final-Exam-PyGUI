@@ -33,14 +33,14 @@ The application provides a user-friendly GUI to upload images, adjust parameters
 ## **Installation**
 
 ### **Requirements**
-- Python 3.8+
-- Libraries: OpenCV, NumPy, PySimpleGUI
+- Python 3.12+
+- Libraries: OpenCV, NumPy, PySimpleGUI, Pillow
 
 ### **Setup**
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/image-processing-project.git
-   cd image-processing-project
+   git clone https://github.com/Corneliox/Image-Processing-Final-Exam-PyGUI.git
+   cd Image-Processing-Final-Exam-PyGUI
 2. Install the required dependencies: 
     ```bash
     pip install -r requirements.txt
@@ -56,7 +56,7 @@ The application provides a user-friendly GUI to upload images, adjust parameters
    - **Upload an image** from your computer
    - **Select the desired processing step & Adjust parameters** for sharpening, smoothing, edge detection, and image segmentation
    - **View Result**
-3. Processed image will be saved automatically in the `data/output/` folder.
+3. Processed image will be saved if you click the `save` button.
 
 ---
 ## **Folder Structure**
@@ -64,25 +64,22 @@ The application provides a user-friendly GUI to upload images, adjust parameters
 The project follows a well-organized folder structure:
 
 ```plaintext
-Final-Exam-PyGUI/
-├── data/
-│   ├── input/                # Folder for raw input images
-│   └── output/               # Folder for processed images
+Final-Exam-PyGUI/New
+├── Image/                    # 
 ├── src/
+│   ├── __pycache__           # Somehow it just Appear??
 │   ├── main.py               # Main entry point for the application
-│   ├── ui.py                 # Handles the user interface logic
 │   ├── sharpening.py         # Module for sharpening functionality
 │   ├── smoothing.py          # Module for smoothing functionality
-│   ├── edge_detection.py     # Module for edge detection
-│   ├── segmentation.py       # Module for segmentation
-│   └── utils.py              # Utility functions (e.g., image loaders, saving results)
-├── tests/                    # Unit tests for each feature
+│   ├── edgedetection.py      # Module for edge detection
+│   ├── imagesegmentation.py  # Module for segmentation
+├── .gitignore                # List of ignored files on my local laptop
 ├── requirements.txt          # List of dependencies
 └── README.md                 # Project documentation
 ```
 --- 
 ## **Preview**
-- **Original and Processed Images:** View side-by-side comparisons of original and processed images.
+- **Processed Images:** Simply put the parameters and **Click** process to see the differences
 - **GUI Features**:
   - Simple, intuitive design for uploading and processing images.
   - Real-time parameter adjustments.
@@ -99,16 +96,8 @@ Final-Exam-PyGUI/
 4. **Image Segmentation**
    - K-means clustering to separate the image into distinct regions.
 
----
-## **Testing**
-
-- **Unit Tests:** Ensure each feature works as expected using Python's built-in `unittest` module
-- Unit test are provided for each features. To run all tests : 
-  ```
-  bash
-  pytest tests/
-
 --- 
-## **License**
+## **Creator License**
+This Project was created by Cornelio Abdimash Christiono | 23.K4.0005, Soegijapranata Satholic University
 
--None-
+**Purpose:** Final Examination of Semester 3
