@@ -5,7 +5,7 @@ from PIL import Image, ImageTk
 import PySimpleGUI as sg
 import os
 
-def smooth_image(image, intensity):
+def smooth_image(image, intensity): #Smooting using Gausian Blur
     return cv2.GaussianBlur(image, (intensity, intensity), 0)
 
 def cv2_to_tk(image):

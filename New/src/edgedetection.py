@@ -6,7 +6,7 @@ import PySimpleGUI as sg
 import os
 
 def edge_detection(image):
-    return cv2.Canny(image, 100, 200)
+    return cv2.Canny(image, 100, 200) #Canny
 
 def cv2_to_tk(image):
     max_width = 1920 * 3 // 4

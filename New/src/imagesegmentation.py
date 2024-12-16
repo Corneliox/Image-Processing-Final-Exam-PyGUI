@@ -8,7 +8,7 @@ import os
 def segment_image(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     _, segmented = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY)
-    return segmented
+    return segmented #Open CV Kmeans
 
 def cv2_to_tk(image):
     max_width = 1920 * 3 // 4

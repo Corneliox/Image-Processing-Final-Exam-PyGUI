@@ -5,7 +5,7 @@ import imagesegmentation
 import sharpening
 import smoothing
 
-def main():
+def main(): #Main Display
     layout = [
         [sg.Text('Welcome to Image Processing Suite', size=(30, 1), justification='center')],
         [sg.Button('Edge Detection')],

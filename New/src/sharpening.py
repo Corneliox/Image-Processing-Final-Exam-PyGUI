@@ -5,12 +5,16 @@ from PIL import Image, ImageTk
 import PySimpleGUI as sg
 import os
 
-def sharpen_image(image, intensity):
+def sharpen_image(image, intensity): #Using Laplacian Kernel Base
     kernel = np.array([[0, -1, 0],
                        [-1, 4, -1],
                        [0, -1, 0]]) * intensity
     return cv2.filter2D(image, -1, kernel)
-
+    #Or laplacian_custom = cv2.filter2D(image, -1, laplacian_kernel)
+    # Laplacian Kernel : [0, -1, 0],
+    #                    [-1, 4, -1],
+    #                    [0, -1, 0]
+    
 def cv2_to_tk(image):
     max_width = 1920 * 3 // 4
     max_height = 1080 * 3 // 4
