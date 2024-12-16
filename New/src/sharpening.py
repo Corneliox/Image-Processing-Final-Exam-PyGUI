@@ -30,7 +30,7 @@ def cv2_to_tk(image):
 def main():
     layout = [
         [sg.Text('Select image folder:'), sg.Input(), sg.FolderBrowse()],
-        [sg.Image(key='-IMAGE-')],
+        [sg.Image(key='-ORIGINAL-'), sg.Image(key='-SHARPENED-')],
         [sg.Slider(range=(1, 5), resolution=0.1, orientation='h', size=(20, 20), key='-SLIDER-', default_value=1)],
         [sg.Button('Process'), sg.Button('Save'), sg.Button('Back'), sg.Button('Exit')]
     ]
@@ -53,9 +53,20 @@ def main():
                 for image_file in image_files:
                     image_path = os.path.join(image_folder, image_file)
                     image = cv2.imread(image_path, cv2.IMREAD_COLOR)
+
                     if image is not None:
+                        # Display the original image
+                        original_tk = cv2_to_tk(image)
+                        window['-ORIGINAL-'].update(data=original_tk)
+
+                        # Process the image
                         sharpened = sharpen_image(image, values['-SLIDER-'])
                         processed_images.append(sharpened)
+
+                        # Display the sharpened image
+                        sharpened_tk = cv2_to_tk(sharpened)
+                        window['-SHARPENED-'].update(data=sharpened_tk)
+
                 sg.popup('Processing completed!')
 
         if event == 'Save':
@@ -72,3 +83,4 @@ def main():
             return
 
     window.close()
+
