@@ -23,7 +23,7 @@ def cv2_to_tk(image):
 def main():
     layout = [
         [sg.Text('Select image folder:'), sg.Input(), sg.FolderBrowse()],
-        [sg.Image(key='-IMAGE-')],
+        [sg.Image(key='-ORIGINAL-'), sg.Image(key='-SMOOTHED-')],
         [sg.Slider(range=(1, 31), resolution=2, orientation='h', size=(20, 20), key='-SLIDER-', default_value=5)],
         [sg.Button('Process'), sg.Button('Save'), sg.Button('Back'), sg.Button('Exit')]
     ]
@@ -46,9 +46,20 @@ def main():
                 for image_file in image_files:
                     image_path = os.path.join(image_folder, image_file)
                     image = cv2.imread(image_path, cv2.IMREAD_COLOR)
+
                     if image is not None:
+                        # Display the original image
+                        original_tk = cv2_to_tk(image)
+                        window['-ORIGINAL-'].update(data=original_tk)
+
+                        # Process the image
                         smoothed = smooth_image(image, int(values['-SLIDER-']))
                         processed_images.append(smoothed)
+
+                        # Display the smoothed image
+                        smoothed_tk = cv2_to_tk(smoothed)
+                        window['-SMOOTHED-'].update(data=smoothed_tk)
+
                 sg.popup('Processing completed!')
 
         if event == 'Save':
@@ -65,3 +76,6 @@ def main():
             return
 
     window.close()
+
+if __name__ == "__main__":
+    main()
